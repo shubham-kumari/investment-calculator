@@ -1,24 +1,38 @@
 import logo from './logo.svg';
 import './App.css';
+import UserInput from './components/UserInput';
+import Header from './components/Header';
+import { useState } from 'react';
+import Results from './components/Results';
 
 function App() {
+  const [inputValue, setInputValue] = useState({
+    //input identifier : value
+    initialInvestment: 10000,
+    annualInvestment: 1200,
+    expectedReturn: 6,
+    duration: 10,
+  });
+
+  const inputIsValid = inputValue.duration >= 1
+
+  function handleChange(inputIdentifier, eventNewValue) {
+    setInputValue((prevInputValue) => {
+      console.log(prevInputValue);
+      return {
+        ...prevInputValue,
+        [inputIdentifier]: +eventNewValue,
+      };
+    });
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    {/* <h1>React Investment Calculator</h1> */}
+    <Header />
+    <UserInput onInputChange={handleChange} userInput={inputValue} />
+    {!inputIsValid && <p className='center'>Please enter a duration greater than Zero</p>}
+    {inputIsValid && <Results userInput={inputValue} />}
+    </>
   );
 }
 
